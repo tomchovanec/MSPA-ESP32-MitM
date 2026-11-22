@@ -10,7 +10,6 @@ Cílem je lokální ovládání vířivky MSpa Tribeca **F-TR062W** přes ESPHom
 
 - Při pasivním odposlechu pomocí ESP32-C6 přicházely po zeleném vodiči rámce `A5 06 2C D7` a `A5 08 00 AD` na 9600 baudů, 8N1. Rámec `06 2C` odpovídal teplotě **22 °C** zobrazené na panelu; panel během testu fungoval.
 - Červený vodič byl naměřen jako +5 V a bílý jako GND. Směr černého vodiče, skutečné úrovně datových signálů a úplná kompatibilita protokolu nejsou ověřeny.
-- ESP32-WROOM-32U bylo při obráceném zasunutí poškozeno. Čeká se na náhradní desku; patici a převodník je třeba před dalším připojením zkontrolovat.
 - Aktivní obousměrné ovládání a chování po výpadku ESP32 dosud nejsou otestované. Původní panel musí zůstat funkční; hardwarový bypass zatím není navržen ani ověřen.
 
 ## Obsah
