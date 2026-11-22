@@ -8,11 +8,11 @@ The complete upstream documentation remains in the French files. Translations ar
 | --- | --- | --- | --- |
 | Hardware a zapojení / Hardware and wiring | [CS](hardware.cs-CZ.md) | [EN](hardware.en.md) | [FR](hardware_schema.md) |
 | Řešení problémů / Troubleshooting | [CS](troubleshooting.cs-CZ.md) | [EN](troubleshooting.en.md) | [FR](troubleshooting.md) |
-| Materiál / Bill of materials | — | — | [FR](hardware_bom.md) |
+| Materiál / Bill of materials | [CS](hardware_bom.cs-CZ.md) | [EN](hardware_bom.en.md) | [FR](hardware_bom.md) |
 | Protokol / Protocol | — | — | [FR](mspa_full_reverse.md) |
 | Přístupové údaje / Secrets | [CS](secrets_reference.cs-CZ.md) | [EN](secrets_reference.en.md) | [FR](secrets_reference.md) |
 | Nastavení Eedomus / Eedomus setup | — | — | [FR](config_eedomus.md) |
 | Diagnostické logy / Diagnostic logs | — | — | [FR](depannage_logs.md) |
-| Simulátor / Simulator | — | — | [FR](simulator_user_guide.md) |
-| Testovací prostředí / Test bench | — | — | [FR](test_bench_simulator.md) |
+| Simulátor / Simulator | [CS](simulator_user_guide.cs-CZ.md) | [EN](simulator_user_guide.en.md) | [FR](simulator_user_guide.md) |
+| Testovací prostředí / Test bench | [CS](test_bench_simulator.cs-CZ.md) | [EN](test_bench_simulator.en.md) | [FR](test_bench_simulator.md) |
 | Historie změn / Changelog | — | — | [FR](CHANGELOG.md) |
