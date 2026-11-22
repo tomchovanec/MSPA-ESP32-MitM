@@ -1,127 +1,39 @@
-# MSPA Man-in-the-Middle Ecosystem (ESP32)
+# Ovládání MSpa pomocí ESP32
 
-**Languages:** [English](README.en.md) | [Čeština](README.cs-CZ.md) | Français (ci-dessous)
+[English](README.en.md) | [Français – původní dokumentace](README.fr.md)
 
-**Original project / Původní projekt:** [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneESP32/MSPA-ESP32-EEDOMUS)
+Tato kopie projektu [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneESP32/MSPA-ESP32-EEDOMUS) vkládá ESP32 mezi původní ovládací panel MSpa a řídicí jednotku vířivky. ESP32 předává komunikaci panelu a poskytuje lokální ovládání přes ESPHome a Home Assistant. Projekt obsahuje také sniffer a simulátor. Původní autor jej vytvořil pro Tribecu řady D; kompatibilita s F-TR062W a deskou M22W(T)-DB(WIFI) Rev2.0 zatím není ověřena.
 
-[![Project Version: v6.3.11](https://img.shields.io/badge/Controller-v6.3.11--STABLE-blueviolet?style=for-the-badge)](esphome/mspa-controller.yaml)
-[![Simulator Version: v1.6.9](https://img.shields.io/badge/Simulator-v1.6.9--ATOMIC-green?style=for-the-badge)](esphome/mspa-simulator.yaml)
-[![Sniffer Version: v1.0.0](https://img.shields.io/badge/Sniffer-v1.0.0--STABLE-blue?style=for-the-badge)](esphome/mspa-sniffer.yaml)
-[![Home Assistant: Ready](https://img.shields.io/badge/Home%20Assistant-Compatible-orange?style=for-the-badge&logo=home-assistant)](https://www.home-assistant.io/)
+**Nepřebírej bez ověření barvy vodičů, pořadí pinů, napětí ani protokol jiného modelu.** Není ověřeno, jak se původní panel zachová při výpadku nebo zamrznutí ESP32; samotný aktivní most nezaručuje hardwarové přemostění. Neobcházej ochrany vířivky.
 
-> **Keywords**: `MSPA`, `Tribeca`, `ESP32`, `ESPHome`, `Home Assistant`, `Eedomus`, `Man-in-the-Middle`, `UART`, `Smart-Home`, `DIY-Spa`
+## Součásti
 
-Bienvenue dans l'écosystème **MSPA-Controller**, la solution ultime pour transformer ton spa **MSpa Tribeca (Série D)** en un objet connecté de pointe, sans sacrifier la sécurité ni la fidélité matérielle.
+- [Řadič](esphome/mspa-controller.yaml): průchozí UART most, entity Home Assistantu a volitelná HTTP integrace Eedomus.
+- [Sniffer](esphome/mspa-sniffer.yaml): odposlech před pokusem o aktivní ovládání.
+- [Simulátor](esphome/mspa-simulator.yaml): testovací prostředí pro vývoj.
+- [Hardware a zapojení](docs/hardware.cs-CZ.md): referenční zapojení původního projektu a poznatky o F-TR062W.
 
-![Interfaces Labo & Production](assets/images/ui_simulator.png)
-*Aperçu du Simulateur (gauche) et du Contrôleur (droite) avec le design Glassmorphism.*
+## Začínáme
 
----
+1. Urči zapojení konektoru, napájení a úrovně signálů. Před připojením vysílače pasivně zaznamenej oba směry komunikace a porovnej rámce s protokolem projektu.
+2. Nainstaluj [ESPHome](https://esphome.io/). Zkopíruj `esphome/secrets.yaml.example` do `esphome/secrets.yaml`, vyplň údaje Wi-Fi a záložního přístupového bodu a soubor s hesly neukládej do repozitáře. Pro Home Assistant bez Eedomus nastav `eedomus_enabled: "false"`; ostatní klíče ale mohou být v souboru stále vyžadovány.
+3. Po ověření zapojení a kompatibility sestav a nahraj firmware příkazem `py -m esphome run esphome/mspa-controller.yaml`.
+4. Přidej zařízení přes integraci ESPHome v Home Assistantu. Před běžným provozem vyzkoušej původní panel, čtení stavu, jednotlivé příkazy a chování při výpadku ESP32, Wi-Fi a HA.
 
-## 🏗️ L'Architecture "One-Stop-Shop"
+Původní francouzská dokumentace a zdrojové kódy jsou zachovány. Podmínky použití a uvedení autora najdeš v [LICENSE](LICENSE).
 
-Ce dépôt regroupe les trois piliers essentiels pour domotiser, tester et auditer ton spa :
+## Jak zapojení funguje
 
-### 1. 📟 [Le Contrôleur (MITM)](esphome/mspa-controller.yaml)
-Le cerveau opérationnel. Placé entre le clavier et le moteur, il agit comme un pont intelligent (**Man-in-the-Middle**).
-- **Intégration Eedomus** : Synchronisation bidirectionnelle native (API HTTP).
-- **UART Firewall** : Verrouillage du clavier physique à distance.
-- **Sniper Engine** : Injection de commandes ultra-précise (latence < 100ms).
+Řadič je vložený mezi původní panel a řídicí jednotku vířivky. Předává příkazy panelu, pokud není zapnutý volitelný zámek klávesnice, čte stav vířivky a může vkládat příkazy z domácí automatizace. Podle původního autora se stav filtrace a ohřevu zobrazuje až po potvrzení z vířivky a firmware omezuje požadovanou teplotu na 40 °C. Jde o tvrzení původního projektu, nikoli o potvrzení kompatibility či bezpečnosti každého modelu.
 
-![Montage MITM](assets/images/hardware_wiring_main.jpg)
-*Le contrôleur ESP32 intercalé entre le clavier et le moteur.*
+Simulátor napodobuje komunikaci pro vývoj a sniffer ji umožňuje sledovat bez převzetí ovládání. Projekt podporuje také ovládací panel Eedomus a předávání stavů přes HTTP; podrobnosti uvádí původní [návod pro Eedomus](docs/config_eedomus.md).
 
-### 2. 🧪 [Le Simulateur (Banc d'essai)](esphome/mspa-simulator.yaml)
-Une copie atomique du spa réel. Indispensable pour développer et tester tes scripts sans sortir au froid.
-- **Staggered Heartbeat** : Reproduction millimétrée du flux UART officiel.
-- **Atomic Realism** : Signature binaire 100% conforme aux traces matérielles.
+## Fotografie PCB majitele
 
-### 3. 🔍 [Le Sniffer (Audit)](esphome/mspa-sniffer.yaml)
-L'outil de diagnostic passif. Décode et affiche en temps réel les trames `0xA5` circulant sur le bus pour le débogage profond.
+![PCB ovládacího panelu vířivky F-TR062W](assets/images/f-tr062w-panel-pcb.jpg)
 
----
+Deska má označení M22W(T)-DB(WIFI) Rev2.0. Fotografii konektoru a naměřenou zem najdeš v [návodu k hardwaru](docs/hardware.cs-CZ.md).
 
-## 🛡️ Fonctionnalités Premium
+## Řešení problémů a podpora
 
-```mermaid
-sequenceDiagram
-    participant C as Clavier Physique
-    participant E as ESP32 (Controller)
-    participant M as Moteur MSPA
-    participant D as Domotique (Eedomus)
-
-    C->>E: "Demande d'allumage (Trames 0x01)"
-    alt Firewall Is Locked
-        E-->>C: Commande ignorée
-    else Firewall Is Open
-        E->>M: Commande relayée
-    end
-    M->>E: Status (Température, État)
-    E->>D: Push URL (Mise à jour état)
-    D->>E: Commande Cloud
-    E->>M: Injection via Sniper Engine
-```
-
-### ✨ Pourquoi c'est différent ?
-- **Silk Filter** : L'interface utilisateur ne "devine" jamais l'état du spa. Elle attend la confirmation réelle venant du bit de retour de la pompe/chauffe pour s'allumer.
-- **Safe-Cap 40°C** : Sécurité logicielle interdisant toute consigne supérieure à la limite constructeur.
----
-
-## 🏠 Compatibilité Home Assistant
-
-Ce projet est **nativement compatible** avec Home Assistant via l'intégration ESPHome.
-1.  **Auto-Découverte** : Une fois flashé et sur votre réseau, HA détectera automatiquement le spa.
-2.  **Entités** : Toutes les fonctions (Chauffe, Filtre, Bulles, Firewall, Température) remontent comme des entités standard.
-3.  **Zéro Config** : Contrairement à d'autres solutions, aucune modification de fichier YAML côté Home Assistant n'est requise.
-
-> [!TIP]
-> Si vous utilisez uniquement Home Assistant, vous pouvez passer `eedomus_enabled` à `false` dans votre fichier `secrets.yaml` pour désactiver les requêtes HTTP inutiles vers Eedomus.
-
-### 📱 Interface Eedomus
-![Dashboard Eedomus](assets/images/ui_eedomus.png)
-*Exemple d'intégration sur le portail Eedomus.*
-
-## 🛠️ Installation & Démarrage
-
-1.  **Matériel** : Consultez la [Liste d'achat validée (BOM)](docs/hardware_bom.md) et le [Schéma de câblage (Synoptique)](docs/hardware_schema.md) pour préparer votre montage.
-2.  **Environnement** : Installe [ESPHome](https://esphome.io/) sur ton PC.
-3.  **Configuration** :
-    - Copie `esphome/secrets.yaml.example` vers `esphome/secrets.yaml`.
-    - Remplis tes accès WiFi et tes IDs de périphériques Eedomus.
-3.  **Flashage** :
-    ```powershell
-    # Pour le contrôleur principal
-    py -m esphome run esphome/mspa-controller.yaml
-    ```
-
----
-
-## 📸 Conseil Photo & Documentation
-
-> [!IMPORTANT]
-> Pour un setup complet, nous recommandons d'ajouter des photos de votre montage dans un dossier `/images` :
-> - **Hardware** : Votre câblage Man-in-the-Middle.
-> - **Dashboard** : Votre interface Eedomus personnalisée.
-> - **WebUI** : L'interface native ESPHome en mode Glassmorphism.
-
----
-
-## 💬 Communauté & Discussion
-
-Ce projet est discuté sur le **forum officiel eedomus** :
-
-> 🔗 [Topic eedomus — MSpa Tribeca ESP32 MITM](https://forum.eedomus.com/viewtopic.php?f=16&t=12955&p=115447&hilit=mspa#p115447)
-
-N'hésite pas à y poster tes retours, questions ou améliorations. La discussion est ouverte à tous les propriétaires de spas MSpa (Série D).
-
----
-
-## 🆘 Support & Dépannage
-
-Un problème ? Une erreur `4b` ou `5b` dans les logs ?
-- Consultez le [**Guide de Dépannage**](docs/troubleshooting.md) pour les solutions aux problèmes courants (Câblage, WiFi, Alimentation).
-- Pour toute question technique, n'hésitez pas à ouvrir une **Issue** sur ce dépôt.
-
----
-
-*Projet maintenu par Etienne. Stabilité validée le 16/04/2026 (Controller v6.3.7 / Simulator v1.6.9).*
+Původní [návod k řešení problémů](docs/troubleshooting.md) popisuje diagnostické chyby rámců UART (`4b`) a kontrolního součtu (`5b`) i problémy s Wi-Fi, napájením a integrací. Je ve francouzštině. O projektu se diskutuje také na [fóru Eedomus](https://forum.eedomus.com/viewtopic.php?f=16&t=12955&p=115447&hilit=mspa#p115447).

@@ -1,6 +1,6 @@
 # MSpa ESP32 controller
 
-[Čeština](README.cs-CZ.md) | [Original French documentation](README.md)
+[Čeština](README.md) | [Original French documentation](README.fr.md)
 
 This is a copy of [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneESP32/MSPA-ESP32-EEDOMUS). The project places an ESP32 between the original MSpa control panel and the spa controller, relaying the panel's UART traffic and providing local ESPHome/Home Assistant control. It also includes a sniffer and simulator. The original project targets a Tribeca D-series spa; compatibility with F-TR062W and board M22W(T)-DB(WIFI) Rev2.0 has not been established.
 
