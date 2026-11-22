@@ -21,3 +21,19 @@ Tato kopie projektu [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/Etienne
 4. Přidej zařízení přes integraci ESPHome v Home Assistantu. Před běžným provozem vyzkoušej původní panel, čtení stavu, jednotlivé příkazy a chování při výpadku ESP32, Wi-Fi a HA.
 
 Původní francouzská dokumentace a zdrojové kódy jsou zachovány. Podmínky použití a uvedení autora najdeš v [LICENSE](LICENSE).
+
+## Jak zapojení funguje
+
+Řadič je vložený mezi původní panel a řídicí jednotku vířivky. Předává příkazy panelu, pokud není zapnutý volitelný zámek klávesnice, čte stav vířivky a může vkládat příkazy z domácí automatizace. Podle původního autora se stav filtrace a ohřevu zobrazuje až po potvrzení z vířivky a firmware omezuje požadovanou teplotu na 40 °C. Jde o tvrzení původního projektu, nikoli o potvrzení kompatibility či bezpečnosti každého modelu.
+
+Simulátor napodobuje komunikaci pro vývoj a sniffer ji umožňuje sledovat bez převzetí ovládání. Projekt podporuje také ovládací panel Eedomus a předávání stavů přes HTTP; podrobnosti uvádí původní [návod pro Eedomus](docs/config_eedomus.md).
+
+## Fotografie PCB majitele
+
+![PCB ovládacího panelu vířivky F-TR062W](assets/images/f-tr062w-panel-pcb.jpg)
+
+Deska má označení M22W(T)-DB(WIFI) Rev2.0. Fotografii konektoru a naměřenou zem najdeš v [návodu k hardwaru](docs/hardware.cs-CZ.md).
+
+## Řešení problémů a podpora
+
+Původní [návod k řešení problémů](docs/troubleshooting.md) popisuje diagnostické chyby rámců UART (`4b`) a kontrolního součtu (`5b`) i problémy s Wi-Fi, napájením a integrací. Je ve francouzštině. O projektu se diskutuje také na [fóru Eedomus](https://forum.eedomus.com/viewtopic.php?f=16&t=12955&p=115447&hilit=mspa#p115447).

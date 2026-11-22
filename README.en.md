@@ -21,3 +21,19 @@ This is a copy of [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneES
 4. Add the device using Home Assistant's ESPHome integration. Test the original panel, status reporting, each command, and behaviour on ESP32, Wi-Fi and HA failures before relying on it.
 
 The original French documentation and source code are preserved. See [LICENSE](LICENSE) for attribution and license terms.
+
+## Architecture
+
+The controller sits between the original control panel and spa controller. It relays panel commands unless the optional keypad lock is enabled, reads spa status, and can insert commands from the automation interface. The upstream author states that filter and heater indicators wait for reported state, and the firmware limits the target temperature to 40 °C. These are upstream claims and are not proof of compatibility or safety on every spa.
+
+The simulator reproduces the communications used for development, while the sniffer observes frames without taking control. The original project also supports an Eedomus dashboard and HTTP state updates; see its [Eedomus setup](docs/config_eedomus.md) for details.
+
+## Owner's PCB
+
+![Control panel PCB for the owner's F-TR062W](assets/images/f-tr062w-panel-pcb.jpg)
+
+The board is marked M22W(T)-DB(WIFI) Rev2.0. See the [hardware guide](docs/hardware.en.md) for the connector photograph and measured ground pin.
+
+## Troubleshooting and support
+
+The upstream [troubleshooting guide](docs/troubleshooting.md) describes UART framing (`4b`) and checksum (`5b`) diagnostic errors, Wi-Fi, power and integration problems. It is in French. The project is also discussed in the [Eedomus community thread](https://forum.eedomus.com/viewtopic.php?f=16&t=12955&p=115447&hilit=mspa#p115447).
