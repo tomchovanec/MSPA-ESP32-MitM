@@ -4,6 +4,8 @@
 
 **Konfigurace je experimentální.** Protokol ani datové piny F-TR062W nejsou ověřené. Původní komponenta není průhledný převodník: ze směru panel → vířivka předává pouze rámce, kterým rozumí a mají platný kontrolní součet. Ostatní může zahodit. Selhání ESP32 může vyřadit panel. Na skutečnou vířivku nepřipojujte konfiguraci před ověřením komunikace, napětí a chování na testovacím prostředí. Ověřte také chování nastavení teploty, filtrace, ohřevu a ochranných funkcí.
 
+Starší verze tohoto YAML posílala při startu vypínací příkazy pro filtraci, ohřev a UVC. Aktuální verze nastavuje u všech tří přepínačů `restore_mode: DISABLED`, aby ESPHome tyto akce při startu samo nevyvolávalo. Zkontrolujte výsledek v logu po restartu s odpojenou vířivkou; uvedená změna nezaručuje další chování původní komponenty ani celého systému.
+
 ## Instalace
 
 Do ESPHome zkopírujte YAML. Komponentu `mspa_uart` si konfigurace stahuje z připnuté verze tohoto veřejného repozitáře. Internet je potřebný při sestavení, ne pro komunikaci s Home Assistantem. Do souboru `secrets.yaml` v ESPHome doplňte vlastní hodnoty:

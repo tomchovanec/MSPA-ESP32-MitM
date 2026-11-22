@@ -108,6 +108,7 @@ switch:
     id: filtrace
     icon: mdi:filter-variant
     optimistic: false
+    restore_mode: DISABLED
     turn_on_action:
       - lambda: id(mspa_logic)->control_filtration(true);
     turn_off_action:
@@ -118,6 +119,7 @@ switch:
     id: ohrev
     icon: mdi:fire
     optimistic: false
+    restore_mode: DISABLED
     turn_on_action:
       - lambda: id(mspa_logic)->control_heating(true);
     turn_off_action:
@@ -128,6 +130,7 @@ switch:
     id: uvc
     icon: mdi:lightbulb-uv
     optimistic: false
+    restore_mode: DISABLED
     turn_on_action:
       - lambda: id(mspa_logic)->control_uvc(true);
     turn_off_action:
