@@ -2,6 +2,8 @@
 
 **Languages:** [English](README.en.md) | [Čeština](README.cs-CZ.md) | Français (ci-dessous)
 
+**Original project / Původní projekt:** [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneESP32/MSPA-ESP32-EEDOMUS)
+
 [![Project Version: v6.3.11](https://img.shields.io/badge/Controller-v6.3.11--STABLE-blueviolet?style=for-the-badge)](esphome/mspa-controller.yaml)
 [![Simulator Version: v1.6.9](https://img.shields.io/badge/Simulator-v1.6.9--ATOMIC-green?style=for-the-badge)](esphome/mspa-simulator.yaml)
 [![Sniffer Version: v1.0.0](https://img.shields.io/badge/Sniffer-v1.0.0--STABLE-blue?style=for-the-badge)](esphome/mspa-sniffer.yaml)
