@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1310" viewBox="0 0 1600 1310" role="img" aria-labelledby="title desc">
 <title id="title">MSpa F-TR062W – návrh zapojení ESP32 a převodníku</title><desc id="desc">Čtyři datové kanály pro spojení řídicí jednotky a původního panelu přes ESP32. Funkce pinů konektoru 1 až 3 nejsou ověřeny, pin 4 je zem.</desc>
-<rect width="1600" height="1080" fill="#f5f7fa"/><style>text{font-family:Arial,sans-serif;fill:#172536}.title{font-size:30px;font-weight:bold}.sub{font-size:20px}.hd{font-size:23px;font-weight:bold}.pin{font-size:21px;font-weight:bold}.sm{font-size:18px}.warn{font-size:20px;fill:#9e280e;font-weight:bold}.wire{fill:none;stroke-width:4;stroke-linejoin:round}.dot{fill:#152434}</style>
+<rect width="1600" height="1310" fill="#f5f7fa"/><style>text{font-family:Arial,sans-serif;fill:#172536}.title{font-size:30px;font-weight:bold}.sub{font-size:20px}.hd{font-size:23px;font-weight:bold}.pin{font-size:21px;font-weight:bold}.sm{font-size:18px}.warn{font-size:20px;fill:#9e280e;font-weight:bold}.wire{fill:none;stroke-width:4;stroke-linejoin:round}.dot{fill:#152434}</style>
 <text x="45" y="52" class="title">MSpa + ESP32-WROOM-32U + 4kanálový převodník</text><text x="45" y="86" class="warn">NÁVRH – NEZAPOJOVAT BEZ OVĚŘENÍ PINŮ, ÚROVNÍ A NAPÁJENÍ</text>
 <rect x="55" y="130" width="360" height="525" rx="16" fill="#e4f0ff" stroke="#4f76a2" stroke-width="3"/><text x="80" y="172" class="hd">ESP32-WROOM-32U</text><text x="80" y="204" class="sm">piny dle dodané fotografie</text>
 <rect x="575" y="130" width="445" height="525" rx="16" fill="#e7f6ef" stroke="#338366" stroke-width="3"/><text x="600" y="172" class="hd">Převodník úrovní MH</text><text x="600" y="204" class="sm">LV = 3,3 V | HV = pouze ověřených 5 V</text>
@@ -12,6 +12,20 @@
 <path class="wire" stroke="#1478bd" d="M415 248 H575 M1020 248 H1150"/><path class="wire" stroke="#d77012" d="M415 318 H575 M1020 318 H1150"/><path class="wire" stroke="#7650aa" d="M415 388 H575 M1020 388 H1080 V535 H1150"/><path class="wire" stroke="#159267" d="M415 458 H575 M1020 458 H1100 V595 H1150"/>
 <text x="1175" y="253" class="pin">TX jednotky → HV1</text><text x="1175" y="323" class="pin">RX jednotky ← HV2</text><text x="1175" y="541" class="pin">TX panelu → HV3</text><text x="1175" y="601" class="pin">RX panelu ← HV4</text>
 <path class="wire" stroke="#c52e28" d="M415 558 H575"/><path class="wire" stroke="#444" d="M415 608 H575"/>
-<text x="48" y="706" class="hd">Napájení a průchozí vodiče</text><text x="48" y="743" class="sub">Panel pin 4 = GND (naměřeno) → jednotka GND + GND ESP32 + oba piny GND převodníku.</text><text x="48" y="777" class="sub">Panel pin 1 = předpokládaných +5 V: ověřit měřením přímo proti pinu 4, než se připojí k HV.</text><text x="48" y="811" class="sub">+5 V a GND mezi panelem a jednotkou zůstávají průchozí. Napájení ESP32 ověřit podle desky a zdroje.</text>
-<text x="48" y="865" class="warn">Piny 2 a 3: pravděpodobně data; směr TX/RX a logické úrovně nebyly ověřeny.</text><text x="48" y="899" class="warn">Každou datovou větev rozdělit mezi jednotku a panel – nikdy nespojit dva vysílače!</text><text x="48" y="933" class="sub">Převodník: LV1↔HV1, LV2↔HV2, LV3↔HV3, LV4↔HV4. Signály přiřadit až po identifikaci.</text><text x="48" y="968" class="sub">Bez hardwarového bypassu není funkce panelu při výpadku ESP32 zaručena.</text><text x="48" y="1017" class="sm">GPIO podle původního firmware; schéma představuje návrh, nikoli ověřený návod k instalaci.</text>
+<text x="48" y="710" class="hd">Napájení – společné vodiče a odbočky</text>
+<rect x="55" y="760" width="235" height="170" rx="12" fill="#fff2df" stroke="#b37a32" stroke-width="2"/><text x="75" y="798" class="pin">ŘÍDICÍ JEDNOTKA</text><text x="75" y="844" class="pin">+5 V</text><text x="75" y="904" class="pin">GND</text>
+<rect x="1245" y="760" width="300" height="170" rx="12" fill="#f5eaff" stroke="#8960a4" stroke-width="2"/><text x="1265" y="798" class="pin">PANEL – KONEKTOR</text><text x="1265" y="844" class="pin">Pin 1: +5 V ?</text><text x="1265" y="904" class="pin">Pin 4: GND ✓</text>
+<path class="wire" stroke="#c52e28" d="M290 837 H1245 M520 837 V785 M850 837 V785"/><circle cx="520" cy="837" r="6" fill="#c52e28"/><circle cx="850" cy="837" r="6" fill="#c52e28"/>
+<rect x="350" y="728" width="350" height="57" rx="8" fill="#fff" stroke="#c52e28"/><text x="365" y="764" class="pin">ESP32 pin 5V / VIN *</text>
+<rect x="745" y="728" width="245" height="57" rx="8" fill="#fff" stroke="#c52e28"/><text x="760" y="764" class="pin">Převodník HV *</text>
+<path class="wire" stroke="#444" d="M290 897 H1245 M410 897 V972 M680 897 V972 M950 897 V972"/><circle cx="410" cy="897" r="6" fill="#444"/><circle cx="680" cy="897" r="6" fill="#444"/><circle cx="950" cy="897" r="6" fill="#444"/>
+<rect x="310" y="972" width="205" height="52" rx="8" fill="#fff" stroke="#444"/><text x="325" y="1005" class="pin">ESP32 GND</text>
+<rect x="560" y="972" width="250" height="52" rx="8" fill="#fff" stroke="#444"/><text x="575" y="1005" class="pin">Převodník GND LV</text>
+<rect x="830" y="972" width="250" height="52" rx="8" fill="#fff" stroke="#444"/><text x="845" y="1005" class="pin">Převodník GND HV</text>
+<text x="48" y="1076" class="warn">* Pin 1 / +5 V, skutečný vstup desky ESP32 a proudová rezerva zdroje musí být ověřeny.</text>
+<text x="48" y="1110" class="warn">Současně nepřipojovat USB a externích 5 V bez ověření ochrany proti zpětnému napájení.</text>
+<text x="48" y="1150" class="sub">ESP32 3V3 → LV převodníku je zakresleno výše. HV = 5 V pouze při odpovídajících úrovních sběrnice.</text>
+<text x="48" y="1190" class="warn">Piny 2 a 3: datové směry a úrovně nebyly ověřeny; každý signál je nutné určit před zapojením.</text>
+<text x="48" y="1224" class="sub">Bez hardwarového bypassu není funkce panelu při výpadku ESP32 zaručena.</text>
+<text x="48" y="1270" class="sm">GPIO podle původního firmware; schéma představuje návrh, nikoli ověřený návod k instalaci.</text>
 </svg>

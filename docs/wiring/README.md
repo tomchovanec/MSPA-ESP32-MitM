@@ -29,6 +29,8 @@ Na fotografii ESP32 s USB dole je **3V3** horní vlevo, **GND** vlevo mezi 12 a 
 
 Aktivní most vyžaduje rozdělení dvou datových cest; příslušné vodiče mezi panelem a jednotkou se neponechávají spojené přímo. Napájení a zem panelu zůstávají průchozí. Návrh nepřiřazuje TX a RX k pinům 2/3, protože to nebylo ověřeno. Při pasivním odposlechu naopak ponechte původní cesty neporušené a k signálům připojujte jen vstupy s vhodnou ochranou; nespojujte vysílací GPIO.
 
+V napájecí části schématu je průběžný 5V vodič mezi jednotkou a panelem s odbočkami na **HV převodníku** a na předpokládaný **5V/VIN vstup vývojové desky**. Druhý průběžný vodič je GND s odbočkami na GND ESP32 a oba GND převodníku. Na snímku je u spodního levého pinu ESP32 označení `5V`; jeho skutečné zapojení jako vstupu je nutné před použitím ověřit. Pin 1 panelu je stále pouze předpokládaných +5 V.
+
 HV a LV převodníku jsou napájecí reference, nikoliv jednotlivé datové piny. Připojení ESP32 na 5V vodič je možné teprve po ověření vstupu konkrétní vývojové desky, proudové rezervy a bezpečnosti napájení; modul samotný není 5V zařízení. Zabraňte zpětnému napájení při současném USB a externím zdroji. Umístění antény ani plastová krabička samy o sobě nezajišťují vodotěsnost ani elektrickou bezpečnost.
 
 Aktivní most může přerušit ovládání při zamrznutí, restartu nebo výpadku ESP32. Návrh neobsahuje automatický bypass ani watchdog bypassu. Před používáním je třeba vyzkoušet původní panel, ovládání, výpadky a bezpečnostní chování. Firmware `mspa-sniffer.yaml` v repozitáři data aktivně přeposílá a není čistě pasivní sniffer.
