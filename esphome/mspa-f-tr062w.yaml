@@ -162,4 +162,3 @@ number:
           uint8_t val = static_cast<uint8_t>(x * 2.0f);
           uint8_t buf[4] = {0xA5, 0x04, val, static_cast<uint8_t>(0xA5 + 0x04 + val)};
           id(uart_spa).write_array(buf, 4);
-
