@@ -4,6 +4,8 @@
 
 **[Přehled dokumentace a dostupných překladů](docs/INDEX.md)** · **[Návrh zapojení ESP32 a převodníku](docs/wiring/README.md)**
 
+**[Experimentální ESPHome konfigurace pro F-TR062W](docs/esphome-f-tr062w.cs-CZ.md)**
+
 Tato kopie projektu [EtienneESP32/MSPA-ESP32-EEDOMUS](https://github.com/EtienneESP32/MSPA-ESP32-EEDOMUS) vkládá ESP32 mezi původní ovládací panel MSpa a řídicí jednotku vířivky. ESP32 předává komunikaci panelu a poskytuje lokální ovládání přes ESPHome a Home Assistant. Projekt obsahuje také sniffer a simulátor. Původní autor jej vytvořil pro Tribecu řady D; kompatibilita s F-TR062W a deskou M22W(T)-DB(WIFI) Rev2.0 zatím není ověřena.
 
 **Nepřebírej bez ověření barvy vodičů, pořadí pinů, napětí ani protokol jiného modelu.** Není ověřeno, jak se původní panel zachová při výpadku nebo zamrznutí ESP32; samotný aktivní most nezaručuje hardwarové přemostění. Neobcházej ochrany vířivky.

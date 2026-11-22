@@ -1,0 +1,165 @@
+# Experimentální konfigurace pro MSpa F-TR062W / ESP32-WROOM-32U.
+# Ověřte zapojení, úrovně, protokol a činnost panelu před skutečným použitím.
+# Řadič aktivně propouští pouze některé rozpoznané rámce panelu.
+# Bez ESP32 a případného hardwarového bypassu nemusí panel fungovat.
+
+esphome:
+  name: mspa-esp32
+  friendly_name: MSpa Tribeca
+  on_boot:
+    priority: 800
+    then:
+      - lambda: |-
+          id(mspa_logic)->set_temp_sensor(id(teplota_vody));
+          id(mspa_logic)->set_setpoint_sensor(id(pozadovana_teplota));
+          id(mspa_logic)->set_filter_alert_sensor(id(upozorneni_filtru));
+          id(mspa_logic)->set_f_switch(id(filtrace));
+          id(mspa_logic)->set_h_switch(id(ohrev));
+          id(mspa_logic)->set_u_switch(id(uvc));
+          id(mspa_logic)->set_b_select(id(bubliny));
+          id(mspa_logic)->set_lock(false);
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Připnutá verze komponenty z uživatelova repozitáře.
+external_components:
+  - source:
+      type: git
+      url: https://github.com/tomchovanec/MSPA-ESP32-MitM.git
+      ref: 87eab00a82449af58d8e90c3e5004344c6393f5b
+      path: esphome/components
+    components: [mspa_uart]
+
+mspa_uart:
+  id: mspa_logic
+  uart_spa: uart_spa
+  uart_kbd: uart_panel
+
+logger:
+  level: INFO
+
+api:
+  encryption:
+    key: !secret mspa_api_key
+  reboot_timeout: 0s
+
+ota:
+  - platform: esphome
+    password: !secret mspa_ota_password
+
+wifi:
+  power_save_mode: none
+  networks:
+    - ssid: !secret wifi_ssid_iot
+      password: !secret wifi_password_iot
+    - ssid: !secret wifi_ssid_dilna
+      password: !secret wifi_password_dilna
+    - ssid: !secret wifi_ssid_pracovna
+      password: !secret wifi_password_pracovna
+    - ssid: !secret wifi_ssid_tominet
+      password: !secret wifi_password_tominet
+  # DHCP: původní statickou IP 192.168.1.178 používá jiné zařízení.
+  reboot_timeout: 0s
+  ap:
+    ssid: mspa-esp32-hotspot
+    password: !secret mspa_ap_password
+
+captive_portal:
+
+web_server:
+  port: 80
+  auth:
+    username: tom
+    password: !secret wifi_password_n3
+
+uart:
+  - id: uart_spa
+    rx_pin: GPIO16
+    tx_pin: GPIO17
+    baud_rate: 9600
+    rx_buffer_size: 1024
+  - id: uart_panel
+    rx_pin: GPIO14
+    tx_pin: GPIO13
+    baud_rate: 9600
+    rx_buffer_size: 1024
+
+sensor:
+  - platform: template
+    name: Teplota vody
+    id: teplota_vody
+    device_class: temperature
+    state_class: measurement
+    unit_of_measurement: °C
+    update_interval: never
+
+binary_sensor:
+  - platform: template
+    name: Upozornění na filtr
+    id: upozorneni_filtru
+    device_class: problem
+
+switch:
+  - platform: template
+    name: Filtrace
+    id: filtrace
+    icon: mdi:filter-variant
+    optimistic: false
+    turn_on_action:
+      - lambda: id(mspa_logic)->control_filtration(true);
+    turn_off_action:
+      - lambda: id(mspa_logic)->control_filtration(false);
+
+  - platform: template
+    name: Ohřev
+    id: ohrev
+    icon: mdi:fire
+    optimistic: false
+    turn_on_action:
+      - lambda: id(mspa_logic)->control_heating(true);
+    turn_off_action:
+      - lambda: id(mspa_logic)->control_heating(false);
+
+  - platform: template
+    name: UVC
+    id: uvc
+    icon: mdi:lightbulb-uv
+    optimistic: false
+    turn_on_action:
+      - lambda: id(mspa_logic)->control_uvc(true);
+    turn_off_action:
+      - lambda: id(mspa_logic)->control_uvc(false);
+
+select:
+  - platform: template
+    name: Bubliny
+    id: bubliny
+    icon: mdi:chart-bubble
+    # Hodnoty musí odpovídat interním řetězcům původní komponenty.
+    options: [Arret, Niveau1, Niveau2, Niveau3]
+    optimistic: false
+    set_action:
+      - lambda: |-
+          uint8_t val = (x == "Niveau1") ? 1 : (x == "Niveau2") ? 2 : (x == "Niveau3") ? 3 : 0;
+          id(mspa_logic)->control_bubbles(val);
+
+number:
+  - platform: template
+    name: Požadovaná teplota
+    id: pozadovana_teplota
+    icon: mdi:thermometer
+    unit_of_measurement: °C
+    mode: box
+    min_value: 20
+    max_value: 40
+    step: 1
+    optimistic: false
+    set_action:
+      - lambda: |-
+          uint8_t val = static_cast<uint8_t>(x * 2.0f);
+          uint8_t buf[4] = {0xA5, 0x04, val, static_cast<uint8_t>(0xA5 + 0x04 + val)};
+          id(uart_spa).write_array(buf, 4);
+
